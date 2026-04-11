@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeTrain</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🏋️‍♂️ VibeTrain</h1>
+            <p>Персональная программа тренировок</p>
+        </header>
+
+        <form class="workout-form" id="workoutForm">
+            <!-- Шаг 1: Цель тренировок -->
+            <div class="form-section">
+                <h2>🎯 Цель тренировок</h2>
+                <div class="option-group">
+                    <label class="option-card">
+                        <input type="radio" name="goal" value="похудеть" required>
+                        <div class="option-content">
+                            <span class="emoji">⚖️</span>
+                            <span class="title">Похудеть</span>
+                            <span class="description">Сжечь жир, уменьшить вес</span>
+                        </div>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="goal" value="набрать массу">
+                        <div class="option-content">
+                            <span class="emoji">💪</span>
+                            <span class="title">Набрать массу</span>
+                            <span class="description">Увеличить мышечную массу</span>
+                        </div>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="goal" value="поддерживать форму">
+                        <div class="option-content">
+                            <span class="emoji">⚡</span>
+                            <span class="title">Поддерживать форму</span>
+                            <span class="description">Сохранить текущий уровень</span>
+                        </div>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="goal" value="оздоровление">
+                        <div class="option-content">
+                            <span class="emoji">❤️</span>
+                            <span class="title">Оздоровление</span>
+                            <span class="description">Здоровье и восстановление</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Шаг 2: Уровень опыта -->
+            <div class="form-section">
+                <h2>📊 Уровень опыта</h2>
+                <div class="option-group">
+                    <label class="option-card">
+                        <input type="radio" name="experience" value="новичок" required>
+                        <div class="option-content">
+                            <span class="emoji">🌱</span>
+                            <span class="title">Новичок</span>
+                            <span class="description">Занимаюсь меньше 3 месяцев</span>
+                        </div>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="experience" value="средний уровень">
+                        <div class="option-content">
+                            <span class="emoji">🚀</span>
+                            <span class="title">Средний уровень</span>
+                            <span class="description">3-12 месяцев опыта</span>
+                        </div>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="experience" value="продвинутый">
+                        <div class="option-content">
+                            <span class="emoji">🏆</span>
+                            <span class="title">Продвинутый</span>
+                            <span class="description">Больше года опыта</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Шаг 3: Доступное оборудование -->
+            <div class="form-section">
+                <h2>🏋️‍♀️ Доступное оборудование</h2>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="equipment" value="гантели">
+                        <span class="checkmark"></span>
+                        <span class="text">Гантели</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="equipment" value="штанга">
+                        <span class="checkmark"></span>
+                        <span class="text">Штанга</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="equipment" value="тренажеры">
+                        <span class="checkmark"></span>
+                        <span class="text">Тренажеры</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="equipment" value="резинки">
+                        <span class="checkmark"></span>
+                        <span class="text">Резинки для фитнеса</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="equipment" value="коврик">
+                        <span class="checkmark"></span>
+                        <span class="text">Коврик для йоги</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="equipment" value="скакалка">
+                        <span class="checkmark"></span>
+                        <span class="text">Скакалка</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="equipment" value="стул">
+                        <span class="checkmark"></span>
+                        <span class="text">Стул или скамья</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="equipment" value="стена">
+                        <span class="checkmark"></span>
+                        <span class="text">Только стена (отжимания)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="equipment" value="тело">
+                        <span class="checkmark"></span>
+                        <span class="text">Только вес тела</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Шаг 4: Ограничения и предпочтения -->
+            <div class="form-section">
+                <h2>⚠️ Ограничения и предпочтения</h2>
+
+                <div class="input-group">
+                    <label for="limitations">Проблемы со здоровьем или травмы:</label>
+                    <textarea id="limitations" name="limitations" placeholder="Например: проблемы со спиной, коленями, не могу приседать глубоко..."></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="age">Возраст:</label>
+                    <input type="number" id="age" name="age" min="16" max="80" placeholder="25">
+                </div>
+
+                <div class="input-group">
+                    <label for="gender">Пол:</label>
+                    <select id="gender" name="gender">
+                        <option value="">Не указывать</option>
+                        <option value="мужчина">Мужчина</option>
+                        <option value="женщина">Женщина</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="daysPerWeek">Дней тренировок в неделю:</label>
+                    <input type="number" id="daysPerWeek" name="daysPerWeek" min="2" max="6" value="3">
+                </div>
+
+                <div class="input-group">
+                    <label for="sessionDuration">Длительность тренировки (минут):</label>
+                    <input type="number" id="sessionDuration" name="sessionDuration" min="20" max="90" value="45">
+                </div>
+            </div>
+
+            <!-- Кнопка отправки -->
+            <div class="form-actions">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    🚀 Создать программу тренировок
+                </button>
+            </div>
+        </form>
+
+        <footer class="footer">
+            <p>🤖 Powered by AI • 📹 С видео-инструкциями</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
