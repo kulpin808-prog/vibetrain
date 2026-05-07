@@ -20,3 +20,18 @@ module.exports = {
   WEBAPP_URL: process.env.WEBAPP_URL || 'http://localhost:3000',
   TELEGRAM_WEBAPP_URL: process.env.TELEGRAM_WEBAPP_URL || process.env.WEBAPP_URL || 'http://localhost:3000'
 };
+
+if (process.env.NODE_ENV === 'production') {
+  const web = module.exports.TELEGRAM_WEBAPP_URL.trim();
+  if (!web.startsWith('https://')) {
+    console.error(
+      '❌ NODE_ENV=production: TELEGRAM_WEBAPP_URL / WEBAPP_URL должен быть публичным HTTPS (Railway), не localhost.\n' +
+        '   В Railway → Variables задайте оба:\n' +
+        '   TELEGRAM_WEBAPP_URL=https://<ваш-сервис>.up.railway.app\n' +
+        '   WEBAPP_URL=https://<ваш-сервис>.up.railway.app\n' +
+        '   Сейчас в процессе: ' +
+        web
+    );
+    process.exit(1);
+  }
+}
