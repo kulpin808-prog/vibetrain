@@ -92,6 +92,27 @@ NOTION_DATABASE_ID=your_id_here
 
 ## 🛠️ Быстрое развертывание на Railway
 
+### Переменные в Railway (обязательно до первого успешного деплоя)
+
+В панели: **сервис** → вкладка **Variables** → **New Variable**. Файла `.env` на Railway нет — только этот список.
+
+| Имя | Значение |
+|-----|----------|
+| `TELEGRAM_BOT_TOKEN` | Токен бота из @BotFather |
+| `OPENAI_API_KEY` | Ключ с [platform.openai.com](https://platform.openai.com) |
+| `NODE_ENV` | `production` |
+
+После **Settings → Networking → Generate Domain** добавьте (один и тот же HTTPS URL, **без** слэша в конце):
+
+| Имя | Значение |
+|-----|----------|
+| `WEBAPP_URL` | `https://ваш-поддомен.up.railway.app` |
+| `TELEGRAM_WEBAPP_URL` | тот же URL |
+
+Сохраните — Railway пересоберёт сервис. В логах не должно остаться ошибок про `TELEGRAM_BOT_TOKEN`.
+
+**Про предупреждение npm:** `npm warn config production Use --omit=dev instead` — это не ошибка деплоя, а замечание npm при `NODE_ENV=production`. На работу бота обычно не влияет, можно игнорировать.
+
 ### Шаг 1: Подготовьте код
 ```bash
 # Добавьте эти файлы в git

@@ -2,11 +2,15 @@ const { Telegraf } = require('telegraf');
 const config = require('./config');
 
 if (!config.TELEGRAM_BOT_TOKEN) {
-  console.error('❌ Задайте TELEGRAM_BOT_TOKEN в .env (см. .env.example)');
+  console.error(
+    '❌ Нет TELEGRAM_BOT_TOKEN. Локально: добавьте в .env (см. .env.example). На Railway: Project → Service → Variables → TELEGRAM_BOT_TOKEN = токен из @BotFather'
+  );
   process.exit(1);
 }
 if (!config.OPENAI_API_KEY) {
-  console.error('❌ Задайте OPENAI_API_KEY в .env (см. .env.example)');
+  console.error(
+    '❌ Нет OPENAI_API_KEY. Локально: .env. На Railway: Variables → OPENAI_API_KEY'
+  );
   process.exit(1);
 }
 const { generateWorkoutProgram } = require('./openai-service');
