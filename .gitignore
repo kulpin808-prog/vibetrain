@@ -5,3 +5,8 @@ node_modules/
 .cursor/mcp.json
 *.log
 .DS_Store
+
+# временные файлы для выгрузки на GitHub
+.tmp_push_mcp.json
+.tmp_push_part*.json
+.mcp_push_part_*.json
