@@ -1,4 +1,4 @@
-> **Актуальная навигация:** [docs/README.md](docs/README.md). Ключевое по деплою — [docs/RUNBOOK.md](docs/RUNBOOK.md).
+> **Актуальная навигация:** [оглавление документации](../README.md). Ключевое по деплою — [RUNBOOK](../RUNBOOK.md).
 
 # 🚀 Развертывание Fitness Trainer AI Bot
 

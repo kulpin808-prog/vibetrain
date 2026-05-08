@@ -1,4 +1,4 @@
-> **Актуальная навигация:** [docs/README.md](docs/README.md) · Web App URL — [docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md).
+> **Актуальная навигация:** [оглавление](../README.md) · Web App URL — [ENVIRONMENTS](../ENVIRONMENTS.md).
 
 # 🚀 Настройка Telegram Web App
 

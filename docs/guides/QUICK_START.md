@@ -1,4 +1,4 @@
-> **Актуальная навигация:** [docs/README.md](docs/README.md) · среды и URL — [docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md).
+> **Актуальная навигация:** [оглавление](../README.md) · среды и URL — [ENVIRONMENTS](../ENVIRONMENTS.md).
 
 # 🚀 Быстрый запуск Fitness Trainer AI
 
@@ -106,7 +106,7 @@ npm start
 
 Если что-то не работает:
 1. Проверьте логи в терминале
-2. Сравните с `WEBAPP_SETUP.md`
+2. Сравните с [WEBAPP_SETUP.md](./WEBAPP_SETUP.md)
 3. Проверьте настройки в BotFather
 
 **Готово к тестированию!** 🎉

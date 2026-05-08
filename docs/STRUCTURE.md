@@ -4,7 +4,12 @@
 .
 ├── data/                    # Данные, не требующие логики (JSON)
 │   └── video-database.json  # Соответствие упражнений → ссылки на видео
-├── docs/                    # Вся актуальная документация
+├── docs/                    # Документация
+│   ├── README.md            # Оглавление
+│   ├── guides/              # Длинные/архивные гайды (деплой, ngrok…)
+│   ├── ENVIRONMENTS.md
+│   ├── ARCHITECTURE.md
+│   └── …
 ├── public/                  # Статика Mini App (HTML/CSS/JS)
 ├── scripts/                 # Утилиты и тесты из командной строки (не продакшен entrypoint)
 │   ├── test-deployment.js

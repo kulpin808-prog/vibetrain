@@ -1,4 +1,4 @@
-> **Актуальная навигация:** [docs/README.md](docs/README.md).
+> **Актуальная навигация:** [оглавление](../README.md).
 
 # 🚀 Настройка Fitness Trainer AI Bot
 

@@ -1,4 +1,4 @@
-> **Актуальная навигация:** [docs/README.md](docs/README.md) · архитектура — [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+> **Актуальная навигация:** [оглавление](../README.md) · архитектура — [ARCHITECTURE](../ARCHITECTURE.md).
 
 # 🧪 Тестирование Telegram Web App
 

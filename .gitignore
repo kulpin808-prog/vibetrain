@@ -6,7 +6,6 @@ node_modules/
 *.log
 .DS_Store
 
-# временные файлы для выгрузки на GitHub
-.tmp_push_mcp.json
-.tmp_push_part*.json
-.mcp_push_part_*.json
+Временные JSON для экспериментов с MCP/GitHub (не коммитить).
+.mcp_push*.json
+.tmp_push*.json

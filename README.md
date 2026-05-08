@@ -22,7 +22,7 @@ AI-тренер в Telegram: программы тренировок и Mini App
 3. **OpenAI** с пополненным балансом API — иначе ответы модели не поедут
 4. В **@BotFather** у Mini App указать тот же HTTPS URL, что у Web App на хостинге
 
-Подробнее: **[docs/RUNBOOK.md](docs/RUNBOOK.md)** и **[docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md)**. Исторический файл `DEPLOYMENT.md` дублирует часть сценариев.
+Подробнее: **[docs/RUNBOOK.md](docs/RUNBOOK.md)** и **[docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md)**. Расширенный старый текст: **[docs/guides/DEPLOYMENT.md](docs/guides/DEPLOYMENT.md)**.
 
 ## 🚀 Быстрый старт
 
@@ -107,7 +107,7 @@ npm run webapp
 2. Получите AI-генерированную программу
 
 ### Развертывание для постоянной работы:
-Смотрите `DEPLOYMENT.md` для подробных инструкций по развертыванию на сервере.
+Смотрите **[docs/guides/DEPLOYMENT.md](docs/guides/DEPLOYMENT.md)** или **[docs/RUNBOOK.md](docs/RUNBOOK.md)**.
 
 **Быстрый старт с Railway:**
 1. Зарегистрируйтесь на [railway.app](https://railway.app)
