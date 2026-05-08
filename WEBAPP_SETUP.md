@@ -1,3 +1,5 @@
+> **Актуальная навигация:** [docs/README.md](docs/README.md) · Web App URL — [docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md).
+
 # 🚀 Настройка Telegram Web App
 
 ## 📋 Что такое Web App?

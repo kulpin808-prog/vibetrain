@@ -1,3 +1,5 @@
+> **Актуальная навигация:** [docs/README.md](docs/README.md).
+
 # 🚀 Настройка Fitness Trainer AI Bot
 
 ## ✅ Уже настроено:

@@ -1,3 +1,5 @@
+> **Актуальная навигация:** [docs/README.md](docs/README.md) · среды и URL — [docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md).
+
 # 🚀 Быстрый запуск Fitness Trainer AI
 
 ## 🔥 Немедленное тестирование

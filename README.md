@@ -1,6 +1,9 @@
 # VibeTrain / Kools 🤖💪
 
-AI-тренер в Telegram: программы тренировок и Mini App-форма. Текущий деплой: [kools.up.railway.app](https://kools.up.railway.app).
+AI-тренер в Telegram: программы тренировок и Mini App-форма.
+
+**Открыть Web App в браузере (прод):** [https://kools.up.railway.app](https://kools.up.railway.app) · тест формы: `/test`  
+**Документация (среды, архитектура, деплой):** папка **[docs/](docs/)** — начните с [docs/README.md](docs/README.md).
 
 ## ✅ Статус проекта
 
@@ -19,7 +22,7 @@ AI-тренер в Telegram: программы тренировок и Mini App
 3. **OpenAI** с пополненным балансом API — иначе ответы модели не поедут
 4. В **@BotFather** у Mini App указать тот же HTTPS URL, что у Web App на хостинге
 
-Подробнее: `DEPLOYMENT.md`.
+Подробнее: **[docs/RUNBOOK.md](docs/RUNBOOK.md)** и **[docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md)**. Исторический файл `DEPLOYMENT.md` дублирует часть сценариев.
 
 ## 🚀 Быстрый старт
 
