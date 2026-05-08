@@ -29,7 +29,7 @@
 4. Создайте API ключ в разделе "Credentials"
 5. Скопируйте API ключ
 
-**Шаг 4:** Обновите `config.js`
+**Шаг 4:** Задайте ключи в `.env` или обновите значения по умолчанию в `src/config.js`
 ```javascript
 GOOGLE_SHEETS_API_KEY: 'ваш_api_ключ_здесь',
 GOOGLE_SHEETS_SPREADSHEET_ID: 'ваш_spreadsheet_id_здесь',
@@ -56,7 +56,7 @@ GOOGLE_SHEETS_SPREADSHEET_ID: 'ваш_spreadsheet_id_здесь',
 3. Скопируйте Internal Integration Token
 4. Поделитесь базой данных с integration
 
-**Шаг 4:** Обновите `config.js`
+**Шаг 4:** Задайте ключи в `.env` или обновите значения по умолчанию в `src/config.js`
 ```javascript
 NOTION_API_KEY: 'ваш_notion_api_ключ_здесь',
 NOTION_DATABASE_ID: 'ваш_database_id_здесь',

@@ -13,9 +13,9 @@ if (!config.OPENAI_API_KEY) {
   );
   process.exit(1);
 }
-const { generateWorkoutProgram } = require('./openai-service');
-const { enhanceProgramWithVideos } = require('./google-sheets-service');
-const { saveWorkoutProgram, getProgramUrl } = require('./notion-service');
+const { generateWorkoutProgram } = require('./services/openai-service');
+const { enhanceProgramWithVideos } = require('./services/google-sheets-service');
+const { saveWorkoutProgram, getProgramUrl } = require('./services/notion-service');
 
 // Simple in-memory user storage (replace with database for production)
 const userRequests = new Map(); // userId -> { count: number, date: string }

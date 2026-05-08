@@ -4,12 +4,13 @@ const path = require('path');
 
 const app = express();
 const PORT = 3001; // Разный порт для тестирования
+const publicRoot = path.join(__dirname, '..', 'public');
 
 // Middleware для обработки JSON
 app.use(express.json());
 
 // Раздача статических файлов Web App
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(publicRoot));
 
 // Логируем все запросы
 app.use((req, res, next) => {
@@ -20,7 +21,7 @@ app.use((req, res, next) => {
 // Web App endpoint
 app.get('/', (req, res) => {
   console.log('📱 Serving Web App');
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(publicRoot, 'index.html'));
 });
 
 // API endpoint для тестирования
@@ -39,7 +40,7 @@ app.get('/health', (req, res) => {
 });
 
 // Запуск сервера
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Test Web App server running on port ${PORT}`);
   console.log(`📱 Web App available at: http://localhost:${PORT}`);
 });

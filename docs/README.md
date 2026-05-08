@@ -6,6 +6,7 @@
 |----------|--------|
 | [ENVIRONMENTS.md](./ENVIRONMENTS.md) | **Ссылки на Web App** (браузер), локально / прод / тестовый стенд, переменные окружения |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Структура системы, слои, границы AI, потоки данных |
+| [STRUCTURE.md](./STRUCTURE.md) | **Дерево папок**, entrypoints, где что менять |
 | [RUNBOOK.md](./RUNBOOK.md) | Railway, BotFather, типовые сбои и проверки |
 
 ## Устаревшие точки входа (исторические)

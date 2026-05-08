@@ -4,6 +4,7 @@ const config = require('./config');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const publicRoot = path.join(__dirname, '..', 'public');
 
 // Middleware для обработки JSON
 app.use(express.json());
@@ -17,9 +18,9 @@ app.use((req, res, next) => {
 });
 
 // Раздача статических файлов Web App
-app.use(express.static(path.join(__dirname, 'public'), {
-    setHeaders: (res, path) => {
-        if (path.endsWith('.html')) {
+app.use(express.static(publicRoot, {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.html')) {
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
         }
     }
@@ -44,13 +45,13 @@ app.get('/health', (req, res) => {
 // Web App endpoint - возвращает HTML
 app.get('/', (req, res) => {
     console.log('🌐 Serving main Web App page');
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(publicRoot, 'index.html'));
 });
 
 // Test endpoint
 app.get('/test', (req, res) => {
     console.log('🧪 Serving test Web App page');
-    res.sendFile(path.join(__dirname, 'public', 'test.html'));
+    res.sendFile(path.join(publicRoot, 'test.html'));
 });
 
 // API endpoint для обработки данных из Web App (опционально)

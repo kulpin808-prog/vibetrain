@@ -21,21 +21,21 @@ flowchart TB
   end
 
   subgraph application [Прикладной слой]
-    ORCH[index.js — маршрутизация, лимиты, склейка ответа]
+    ORCH[src/index.js — маршрутизация, лимиты, склейка ответа]
   end
 
   subgraph ai [AI-слой]
-    OAI[openai-service.js — модель, системный промпт, параметры вызова]
+    OAI[src/services/openai-service.js — модель, системный промпт, параметры вызова]
   end
 
   subgraph domain_data [Данные и обогащение]
-    VID[google-sheets-service.js / video-database.json]
-    NOT[notion-service.js — опционально]
+    VID[src/services/google-sheets-service.js / data/video-database.json]
+    NOT[src/services/notion-service.js — опционально]
   end
 
   subgraph infra [Инфраструктура]
-    CFG[config.js + env]
-    SRV[server.js — HTTP, статика, health]
+    CFG[src/config.js + env]
+    SRV[src/server.js — HTTP, статика, health]
   end
 
   WA -->|sendData / сообщения| TG
@@ -51,20 +51,20 @@ flowchart TB
 
 | Слой | Файлы / модули | Ответственность |
 |------|----------------|-----------------|
-| **Presentation** | `index.js` (handlers), `public/*` | Протокол Telegram, UI формы, вызов `tg.sendData` |
-| **Application** | оркестрация в `index.js` (`processWorkoutRequest`) | Лимиты, порядок шагов, нарезка длинных ответов, обработка ошибок для пользователя |
-| **AI** | `openai-service.js` | Единственная точка вызова LLM: модель, temperature, max_tokens, **system prompt**, формат диалога |
-| **Domain / enrichment** | `google-sheets-service.js`, `notion-service.js` | Видео к упражнениям, сохранение программы (опционально) |
-| **Infrastructure** | `config.js`, `server.js` | Секреты из env, HTTP-сервер, раздача Web App |
+| **Presentation** | `src/index.js` (handlers), `public/*` | Протокол Telegram, UI формы, вызов `tg.sendData` |
+| **Application** | оркестрация в `src/index.js` (`processWorkoutRequest`) | Лимиты, порядок шагов, нарезка длинных ответов, обработка ошибок для пользователя |
+| **AI** | `src/services/openai-service.js` | Единственная точка вызова LLM: модель, temperature, max_tokens, **system prompt**, формат диалога |
+| **Domain / enrichment** | `src/services/google-sheets-service.js`, `src/services/notion-service.js` | Видео к упражнениям, сохранение программы (опционально) |
+| **Infrastructure** | `src/config.js`, `src/server.js` | Секреты из env, HTTP-сервер, раздача Web App |
 
 ---
 
 ## 3. Практики для AI-части (что зафиксировано в коде)
 
-1. **Один источник правды для промпта** — константа `SYSTEM_PROMPT` в `openai-service.js`. Изменения поведения модели — прежде всего здесь (и с контролем версий в git).
+1. **Один источник правды для промпта** — константа `SYSTEM_PROMPT` в `src/services/openai-service.js`. Изменения поведения модели — прежде всего здесь (и с контролем версий в git).
 2. **Контракт входа в LLM** — `userRequest`: строка (сырой текст или сериализованные поля формы через бота). Расширение: явное JSON-схематичное тело в отдельном модуле до вызова `generateWorkoutProgram`.
 3. **Контракт выхода** — свободный текст программы; постобработка (видео, Notion) не смешана с вызовом API.
-4. **Конфигурация модели** — `AI_MODEL`, ключ API в `config.js` / env; в промпт **секреты не попадают**.
+4. **Конфигурация модели** — `AI_MODEL`, ключ API в `src/config.js` / env; в промпт **секреты не попадают**.
 5. **Отказоустойчивость** — ошибки OpenAI логируются и переводятся в пользовательское сообщение; опциональные сервисы (Notion) не роняют основной сценарий.
 
 ---
@@ -72,8 +72,8 @@ flowchart TB
 ## 4. Поток данных (основной сценарий)
 
 1. Пользователь → Telegram `/start` или сообщение / данные Web App.
-2. `index.js` проверяет лимит, вызывает `generateWorkoutProgram(...)`.
-3. `openai-service.js` → OpenAI Chat Completions → текст программы.
+2. `src/index.js` проверяет лимит, вызывает `generateWorkoutProgram(...)`.
+3. `src/services/openai-service.js` → OpenAI Chat Completions → текст программы.
 4. `enhanceProgramWithVideos` обогащает текст (локальная БД / Sheets).
 5. `saveWorkoutProgram` (если настроен Notion).
 6. Ответ частями в чат при превышении лимита Telegram.
@@ -83,8 +83,8 @@ flowchart TB
 ## 5. Расширение без «хаоса»
 
 - **Новый канал** (например, второй мессенджер) — новый адаптер в presentation, тот же вызов оркестрации.
-- **Другая модель / провайдер** — заменить или обернуть реализацию в `openai-service.js`, сохранить интерфейс `generateWorkoutProgram(prompt)`.
-- **Строгая форма ответа** — добавить structured output / JSON schema в AI-слой и парсер в application-слое, не размазывая по `index.js`.
+- **Другая модель / провайдер** — заменить или обернуть реализацию в `src/services/openai-service.js`, сохранить интерфейс `generateWorkoutProgram(prompt)`.
+- **Строгая форма ответа** — добавить structured output / JSON schema в AI-слой и парсер в application-слое, не размазывая по `src/index.js`.
 
 ---
 

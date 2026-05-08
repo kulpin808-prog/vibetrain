@@ -28,16 +28,17 @@ npm start
 ## 📋 Структура проекта
 
 ```
-fitness-trainer-ai/
-├── index.js                 # 🤖 Основной бот
-├── server.js               # 🌐 Web App сервер
-├── video-database.json     # 🎥 База видео
-├── config.js              # ⚙️ Настройки
-├── public/                # 📱 Web App файлы
-│   ├── index.html        # Форма создания программ
-│   ├── styles.css        # Стили
-│   └── script.js         # Логика Web App
-└── test-webapp-server.js # 🧪 Тестовый сервер
+vibetrain/
+├── src/
+│   ├── index.js              # 🤖 Бот
+│   ├── server.js             # 🌐 Web App (Express)
+│   ├── config.js
+│   └── services/
+├── data/
+│   └── video-database.json
+├── public/                    # 📱 Mini App
+├── scripts/                   # 🧪 CLI-тесты
+└── docs/
 ```
 
 ## 🔗 Как связаны бот и Web App

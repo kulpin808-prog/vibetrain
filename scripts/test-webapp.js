@@ -1,5 +1,5 @@
 // Тест обработки Web App данных
-const config = require('./config');
+const config = require('../src/config');
 
 // Мокаем ctx объект как в Telegraf
 const mockCtx = {

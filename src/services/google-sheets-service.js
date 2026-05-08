@@ -4,6 +4,9 @@ const path = require('path');
 // Cache for video links
 let videoCache = null;
 
+/** JSON с путями к упражнениям — репозиторий: data/video-database.json */
+const VIDEO_DB_PATH = path.join(__dirname, '..', '..', 'data', 'video-database.json');
+
 async function loadVideoDatabase() {
   try {
     // Check cache first
@@ -11,11 +14,8 @@ async function loadVideoDatabase() {
       return videoCache;
     }
 
-    // Load from local JSON file
-    const videoDbPath = path.join(__dirname, 'video-database.json');
-
-    if (fs.existsSync(videoDbPath)) {
-      const videoData = fs.readFileSync(videoDbPath, 'utf8');
+    if (fs.existsSync(VIDEO_DB_PATH)) {
+      const videoData = fs.readFileSync(VIDEO_DB_PATH, 'utf8');
       videoCache = JSON.parse(videoData);
       console.log(`Loaded ${Object.keys(videoCache).length} video links from local database`);
       return videoCache;

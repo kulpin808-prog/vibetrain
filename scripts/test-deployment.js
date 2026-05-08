@@ -1,10 +1,10 @@
 // Тестовый скрипт для проверки развертывания
 // Запускаем перед деплоем, чтобы убедиться что все работает
 
-const config = require('./config');
-const { generateWorkoutProgram } = require('./openai-service');
-const { enhanceProgramWithVideos } = require('./google-sheets-service');
-const { saveWorkoutProgram } = require('./notion-service');
+const config = require('../src/config');
+const { generateWorkoutProgram } = require('../src/services/openai-service');
+const { enhanceProgramWithVideos } = require('../src/services/google-sheets-service');
+const { saveWorkoutProgram } = require('../src/services/notion-service');
 
 async function runTests() {
   console.log('🧪 Запуск тестов развертывания...\n');

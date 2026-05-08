@@ -160,7 +160,7 @@ git push origin main
 
 `npm run start:full`
 
-Так на одном порту поднимается и **Web App** (`server.js`), и **бот** (`index.js`, long polling).
+Так на одном порту поднимается и **Web App** (`src/server.js`), и **бот** (`src/index.js`, long polling).
 
 ### Шаг 4: Настройте переменные
 В Railway dashboard:

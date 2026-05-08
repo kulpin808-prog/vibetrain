@@ -1,6 +1,7 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
-// Конфиг VibeTrain — секреты только из переменных окружения (.env или панель хостинга)
+// Конфиг Kools / VibeTrain — секреты только из переменных окружения (.env или панель хостинга)
 
 module.exports = {
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || '',
