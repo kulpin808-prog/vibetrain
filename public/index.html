@@ -2,188 +2,108 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
     <title>VibeTrain</title>
-    <link rel="stylesheet" href="styles.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>🏋️‍♂️ VibeTrain</h1>
-            <p>Персональная программа тренировок</p>
-        </header>
-
-        <form class="workout-form" id="workoutForm">
-            <!-- Шаг 1: Цель тренировок -->
-            <div class="form-section">
-                <h2>🎯 Цель тренировок</h2>
-                <div class="option-group">
-                    <label class="option-card">
-                        <input type="radio" name="goal" value="похудеть" required>
-                        <div class="option-content">
-                            <span class="emoji">⚖️</span>
-                            <span class="title">Похудеть</span>
-                            <span class="description">Сжечь жир, уменьшить вес</span>
-                        </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="radio" name="goal" value="набрать массу">
-                        <div class="option-content">
-                            <span class="emoji">💪</span>
-                            <span class="title">Набрать массу</span>
-                            <span class="description">Увеличить мышечную массу</span>
-                        </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="radio" name="goal" value="поддерживать форму">
-                        <div class="option-content">
-                            <span class="emoji">⚡</span>
-                            <span class="title">Поддерживать форму</span>
-                            <span class="description">Сохранить текущий уровень</span>
-                        </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="radio" name="goal" value="оздоровление">
-                        <div class="option-content">
-                            <span class="emoji">❤️</span>
-                            <span class="title">Оздоровление</span>
-                            <span class="description">Здоровье и восстановление</span>
-                        </div>
-                    </label>
+    <div class="device-stage">
+        <figure class="iphone17" aria-label="Превью в корпусе телефона">
+            <div class="iphone17__shell">
+                <div class="iphone17__island"></div>
+                <div class="iphone17__screen">
+                    <div id="app" class="app"></div>
                 </div>
             </div>
-
-            <!-- Шаг 2: Уровень опыта -->
-            <div class="form-section">
-                <h2>📊 Уровень опыта</h2>
-                <div class="option-group">
-                    <label class="option-card">
-                        <input type="radio" name="experience" value="новичок" required>
-                        <div class="option-content">
-                            <span class="emoji">🌱</span>
-                            <span class="title">Новичок</span>
-                            <span class="description">Занимаюсь меньше 3 месяцев</span>
-                        </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="radio" name="experience" value="средний уровень">
-                        <div class="option-content">
-                            <span class="emoji">🚀</span>
-                            <span class="title">Средний уровень</span>
-                            <span class="description">3-12 месяцев опыта</span>
-                        </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="radio" name="experience" value="продвинутый">
-                        <div class="option-content">
-                            <span class="emoji">🏆</span>
-                            <span class="title">Продвинутый</span>
-                            <span class="description">Больше года опыта</span>
-                        </div>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Шаг 3: Доступное оборудование -->
-            <div class="form-section">
-                <h2>🏋️‍♀️ Доступное оборудование</h2>
-                <div class="checkbox-group">
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="equipment" value="гантели">
-                        <span class="checkmark"></span>
-                        <span class="text">Гантели</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="equipment" value="штанга">
-                        <span class="checkmark"></span>
-                        <span class="text">Штанга</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="equipment" value="тренажеры">
-                        <span class="checkmark"></span>
-                        <span class="text">Тренажеры</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="equipment" value="резинки">
-                        <span class="checkmark"></span>
-                        <span class="text">Резинки для фитнеса</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="equipment" value="коврик">
-                        <span class="checkmark"></span>
-                        <span class="text">Коврик для йоги</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="equipment" value="скакалка">
-                        <span class="checkmark"></span>
-                        <span class="text">Скакалка</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="equipment" value="стул">
-                        <span class="checkmark"></span>
-                        <span class="text">Стул или скамья</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="equipment" value="стена">
-                        <span class="checkmark"></span>
-                        <span class="text">Только стена (отжимания)</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="equipment" value="тело">
-                        <span class="checkmark"></span>
-                        <span class="text">Только вес тела</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Шаг 4: Ограничения и предпочтения -->
-            <div class="form-section">
-                <h2>⚠️ Ограничения и предпочтения</h2>
-
-                <div class="input-group">
-                    <label for="limitations">Проблемы со здоровьем или травмы:</label>
-                    <textarea id="limitations" name="limitations" placeholder="Например: проблемы со спиной, коленями, не могу приседать глубоко..."></textarea>
-                </div>
-
-                <div class="input-group">
-                    <label for="age">Возраст:</label>
-                    <input type="number" id="age" name="age" min="16" max="80" placeholder="25">
-                </div>
-
-                <div class="input-group">
-                    <label for="gender">Пол:</label>
-                    <select id="gender" name="gender">
-                        <option value="">Не указывать</option>
-                        <option value="мужчина">Мужчина</option>
-                        <option value="женщина">Женщина</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="daysPerWeek">Дней тренировок в неделю:</label>
-                    <input type="number" id="daysPerWeek" name="daysPerWeek" min="2" max="6" value="3">
-                </div>
-
-                <div class="input-group">
-                    <label for="sessionDuration">Длительность тренировки (минут):</label>
-                    <input type="number" id="sessionDuration" name="sessionDuration" min="20" max="90" value="45">
-                </div>
-            </div>
-
-            <!-- Кнопка отправки -->
-            <div class="form-actions">
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    🚀 Создать программу тренировок
-                </button>
-            </div>
-        </form>
-
-        <footer class="footer">
-            <p>🤖 Powered by AI • 📹 С видео-инструкциями</p>
-        </footer>
+        </figure>
     </div>
 
-    <script src="script.js"></script>
+    <template id="app-template">
+        <div class="app__logo-float">
+            <img src="app-logo.jpg" alt="VibeTrain" class="app__logo" width="28" height="28" decoding="async">
+        </div>
+        <main class="app__main" id="app-main"></main>
+        <nav class="app__tabbar" role="tablist" aria-label="Разделы приложения">
+            <button type="button" class="app__tab is-active" role="tab" aria-selected="true" aria-controls="panel-workouts" id="tab-workouts" data-view="workouts">
+                <span class="app__tab-icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-6"/></svg>
+                </span>
+                <span class="app__tab-label">Тренировки</span>
+            </button>
+            <button type="button" class="app__tab" role="tab" aria-selected="false" aria-controls="panel-trainer" id="tab-trainer" data-view="trainer">
+                <span class="app__tab-icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
+                </span>
+                <span class="app__tab-label">Мой тренер</span>
+            </button>
+        </nav>
+    </template>
+
+    <template id="view-workouts-template">
+        <section class="view view--workouts" id="panel-workouts" role="tabpanel" aria-labelledby="tab-workouts">
+            <div class="segment" data-segment-group data-active="ready" role="tablist" aria-label="Тип программ">
+                <span class="segment__slider" aria-hidden="true"></span>
+                <button type="button" class="segment__btn is-active" role="tab" aria-selected="true" id="seg-ready" data-segment="ready" aria-controls="workouts-ready-panel">Готовые</button>
+                <button type="button" class="segment__btn" role="tab" aria-selected="false" id="seg-personal" data-segment="personal" aria-controls="workouts-personal-panel">Персональные</button>
+            </div>
+            <div class="workouts-panels">
+                <div class="workouts-panel" id="workouts-ready-panel" role="tabpanel" aria-labelledby="seg-ready" data-workouts-panel="ready">
+                    <header class="view__header view__header--compact">
+                        <p class="view__eyebrow">База</p>
+                        <h1 class="view__title">Готовые программы</h1>
+                        <p class="view__subtitle">Фиксированные планы по уровню и цели — без персонального подбора.</p>
+                    </header>
+                    <div class="view__content">
+                        <article class="card">
+                            <h2 class="card__title">Новичок · 3 дня в неделю</h2>
+                            <p class="card__meta">Силовой шаблон, который можно начать сегодня.</p>
+                        </article>
+                        <article class="card">
+                            <h2 class="card__title">Средний уровень</h2>
+                            <p class="card__meta">Скоро: полный каталог пресетов.</p>
+                        </article>
+                    </div>
+                </div>
+                <div class="workouts-panel workouts-panel--hidden" id="workouts-personal-panel" role="tabpanel" aria-labelledby="seg-personal" hidden data-workouts-panel="personal">
+                    <header class="view__header view__header--compact">
+                        <p class="view__eyebrow">Премиум</p>
+                        <h1 class="view__title">Персональные</h1>
+                        <p class="view__subtitle">План под вас после опроса, анкеты и тестов — в разделе «Мой тренер».</p>
+                    </header>
+                    <div class="view__content">
+                        <article class="card card--quiet">
+                            <h2 class="card__title">Пока нет активного плана</h2>
+                            <p class="card__meta">Откройте «Мой тренер» и начните диалог — мы соберём данные для программы.</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <template id="view-trainer-template">
+        <section class="view view--trainer" id="panel-trainer" role="tabpanel" aria-labelledby="tab-trainer" hidden>
+            <div class="trainer-chat">
+                <header class="chat__header">
+                    <div class="chat__header-text">
+                        <h1 class="chat__title">Мой тренер</h1>
+                        <p class="chat__status">Онлайн · ответит как закончит мысль</p>
+                    </div>
+                </header>
+                <div class="chat__messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+                <form class="chat__composer" id="chat-form" autocomplete="off">
+                    <label class="visually-hidden" for="chat-input">Сообщение тренеру</label>
+                    <textarea id="chat-input" class="chat__input" name="message" rows="1" placeholder="Сообщение…" maxlength="2000"></textarea>
+                    <button type="submit" class="chat__send" aria-label="Отправить">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4L4 15h6v5l2-3h6l-6-13z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </form>
+            </div>
+        </section>
+    </template>
+
+    <script src="app.js" type="module"></script>
 </body>
 </html>
