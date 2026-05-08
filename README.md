@@ -1,6 +1,6 @@
-# VibeTrain 🤖💪
+# VibeTrain / Kools 🤖💪
 
-AI-тренер в Telegram (@vibetrain): программы тренировок и Mini App-форма.
+AI-тренер в Telegram: программы тренировок и Mini App-форма. Текущий деплой: [kools.up.railway.app](https://kools.up.railway.app).
 
 ## ✅ Статус проекта
 
