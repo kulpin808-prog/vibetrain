@@ -3,35 +3,28 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT, 10) || 3000;
 const publicRoot = path.join(__dirname, '..', 'public');
 const adminRoot = path.join(__dirname, '..', 'admin');
 const adminIndex = path.join(adminRoot, 'index.html');
 
-function pathOnly(req) {
-    return req.originalUrl.split('?')[0];
-}
+/** Иначе Express может трактовать /admin и /admin/ как один путь — редирект и HTML ломаются в браузере. */
+app.set('strict routing', true);
 
 if (!fs.existsSync(adminIndex)) {
     console.error('[admin] Нет файла:', adminIndex, '(проверьте, что вы в корне репозитория и папка admin на месте)');
 }
 
-/**
- * Сначала явно отдаём HTML по /admin/, потом static — иначе часть окружений Express
- * не срабатывает на вложенном Router/только static, и запрос падает в 404 { error: Not found }.
- */
-app.use((req, res, next) => {
-    if (req.method !== 'GET' && req.method !== 'HEAD') return next();
-    const p = pathOnly(req);
-    if (p === '/admin') {
-        return res.redirect(302, '/admin/');
-    }
-    if (p === '/admin/') {
-        return res.sendFile(adminIndex, (err) => {
-            if (err) next(err);
-        });
-    }
-    next();
+app.get('/admin', (req, res) => {
+    const host = req.get('host') || `localhost:${PORT}`;
+    const proto = req.protocol || 'http';
+    res.redirect(302, `${proto}://${host}/admin/`);
+});
+
+app.get('/admin/', (req, res, next) => {
+    res.sendFile(adminIndex, (err) => {
+        if (err) next(err);
+    });
 });
 
 app.use(
