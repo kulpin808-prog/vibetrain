@@ -17,7 +17,17 @@
 
 2. **GitHub** — в [Neon Console](https://console.neon.tech) → твой проект → **Integrations** → **GitHub** → подключи репозиторий (например `kulpin808-prog/vibetrain`). В GitHub появятся **secret** `NEON_API_KEY` и **variable** `NEON_PROJECT_ID` — они нужны workflow [`.github/workflows/neon-branch.yml`](.github/workflows/neon-branch.yml) (ветки БД на PR).
 
-3. **Railway** — в сервисе открой **Variables** и задай **`DATABASE_URL`** = connection string из Neon (**Connect** в дашборде, ветка, с которой должен работать прод). Автоматически `neonctl init` Railway не связывает; строку копируешь вручную. Подробнее: [Use Neon Postgres with Railway](https://neon.com/docs/guides/railway).
+3. **Railway — переменная `DATABASE_URL`**
+
+   Сервис **не получает** её из Neon автоматически. Сделай так:
+
+   1. [Neon Console](https://console.neon.tech) → твой проект → **Dashboard** → **Connect**.
+   2. Выбери ветку для прода (обычно `main` / production), роль и БД — скопируй **Connection string** (формат `postgresql://…?sslmode=require`). При необходимости включи **Pooled connection**, если Neon так предлагает для приложений.
+   3. [Railway](https://railway.com) → твой проект → **сервис** с этим репозиторием → вкладка **Variables**.
+   4. **New Variable** → имя ровно **`DATABASE_URL`** → вставь скопированную строку → сохрани.
+   5. Railway пересоберёт/перезапустит деплой (или нажми **Redeploy**).
+
+   Пока в коде нет обращения к Postgres, переменная не используется, но её можно задать заранее — так не забудешь, когда подключишь БД (см. [Neon + Railway](https://neon.com/docs/guides/railway)).
 
 Шаблон переменных: скопируй [`.env.example`](.env.example) в `.env` (не коммить).
 
