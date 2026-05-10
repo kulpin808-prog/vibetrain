@@ -6,12 +6,17 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
-    "verify": "node scripts/verify-routes.js"
+    "verify": "node scripts/verify-routes.js",
+    "neon:init": "neonctl init",
+    "neon:init:cursor": "neonctl init --agent cursor"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "express": "^4.22.1"
+  },
+  "devDependencies": {
+    "neonctl": "^2.22.0"
   }
 }
