@@ -94,18 +94,28 @@ function scrollChatToEnd() {
     el.scrollTop = el.scrollHeight;
 }
 
+const TRAINER_THREAD_KEY = 'vibetrain_trainer_thread_id';
+
+function getTrainerThreadId() {
+    try {
+        let id = window.localStorage.getItem(TRAINER_THREAD_KEY);
+        if (!id) {
+            id = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `t-${Date.now()}`;
+            window.localStorage.setItem(TRAINER_THREAD_KEY, id);
+        }
+        return id;
+    } catch (_) {
+        return `anon-${Date.now()}`;
+    }
+}
+
 function initTrainerChat(root) {
     const form = root.querySelector('#chat-form');
     const input = root.querySelector('#chat-input');
     const messages = root.querySelector('#chat-messages');
     if (!form || !input || !messages) return;
 
-    messages.appendChild(
-        createChatRow(
-            'assistant',
-            'Привет! Я твой AI‑тренер. Расскажи цель и уровень — задам пару вопросов, как в чате. Здесь пока демо: ответы имитация, позже подключим реальную модель.'
-        )
-    );
+    const threadId = getTrainerThreadId();
 
     function resizeInput() {
         input.style.height = 'auto';
@@ -114,12 +124,48 @@ function initTrainerChat(root) {
 
     input.addEventListener('input', resizeInput);
 
-    const demoReplies = [
-        'Понял. Запиши три тренировки в неделю и сон не меньше 7 часов — это база для прогресса.',
-        'Могу предложить лёгкую разминку 8 минут перед следующей сессией. Напиши, что у тебя за оборудование дома.',
-        'Хороший вопрос. Если что‑то болит — остановись и уточним нагрузку, без геройства.',
-    ];
-    let replyIndex = 0;
+    function showWelcome() {
+        messages.appendChild(
+            createChatRow(
+                'assistant',
+                'Привет! Я твой AI‑тренер. Расскажи цель и уровень — задам пару вопросов. Ответы пока демо (как раньше), но диалог сохраняется в базе, если на сервере задан DATABASE_URL.'
+            )
+        );
+    }
+
+    function renderHistory(list) {
+        messages.innerHTML = '';
+        for (const m of list) {
+            messages.appendChild(createChatRow(m.role, m.content));
+        }
+        if (!list.length) {
+            showWelcome();
+        }
+        scrollChatToEnd();
+    }
+
+    void (async () => {
+        try {
+            const r = await fetch(`/api/trainer/threads/${encodeURIComponent(threadId)}/messages`);
+            const j = await r.json();
+            if (!j.ok) {
+                messages.appendChild(
+                    createChatRow(
+                        'assistant',
+                        `Чат недоступен: ${j.error || r.status}. Задай DATABASE_URL на сервере (Neon) и перезапусти.`
+                    )
+                );
+                scrollChatToEnd();
+                return;
+            }
+            renderHistory(j.messages || []);
+        } catch (_) {
+            messages.appendChild(
+                createChatRow('assistant', 'Не удалось связаться с сервером. Проверьте сеть и деплой.')
+            );
+            scrollChatToEnd();
+        }
+    })();
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -138,13 +184,29 @@ function initTrainerChat(root) {
         messages.appendChild(typingRow);
         scrollChatToEnd();
 
-        window.setTimeout(() => {
-            typingRow.remove();
-            const reply = demoReplies[replyIndex % demoReplies.length];
-            replyIndex += 1;
-            messages.appendChild(createChatRow('assistant', reply));
-            scrollChatToEnd();
-        }, 900);
+        void (async () => {
+            try {
+                const r = await fetch(`/api/trainer/threads/${encodeURIComponent(threadId)}/messages`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text }),
+                });
+                const j = await r.json();
+                typingRow.remove();
+                if (!j.ok) {
+                    messages.appendChild(
+                        createChatRow('assistant', `Ошибка: ${j.error || r.status}. Проверьте DATABASE_URL.`)
+                    );
+                    scrollChatToEnd();
+                    return;
+                }
+                renderHistory(j.messages || []);
+            } catch (_) {
+                typingRow.remove();
+                messages.appendChild(createChatRow('assistant', 'Ошибка сети при отправке.'));
+                scrollChatToEnd();
+            }
+        })();
     });
 }
 

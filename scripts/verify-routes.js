@@ -64,6 +64,11 @@ server.listen(0, '127.0.0.1', async () => {
 
         const home = await request(port, '/');
         ok(home.status === 200, `/ ожидали 200, получили ${home.status}`);
+
+        const health = await request(port, '/api/health');
+        ok(health.status === 200, `/api/health ожидали 200, получили ${health.status}`);
+        ok(health.body.includes('"ok":true'), '/api/health должен вернуть ok: true');
+        ok(health.body.includes('"dbConfigured"'), '/api/health должен содержать dbConfigured');
     } catch (e) {
         console.error('FAIL:', e.message);
         failed = true;

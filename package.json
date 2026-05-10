@@ -14,7 +14,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.22.1"
+    "dotenv": "^16.5.0",
+    "express": "^4.22.1",
+    "pg": "^8.14.1"
   },
   "devDependencies": {
     "neonctl": "^2.22.0"

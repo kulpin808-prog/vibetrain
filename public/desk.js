@@ -1,83 +1,8 @@
 /**
- * Kools gym admin — прототип (мок-данные). Позже: замена fetch к API.
+ * Kools gym admin — данные с сервера (Neon через /api/desk/*).
  */
 
 const TENANT = { name: 'FitPrime Арбат', id: 'tenant_demo' };
-
-const MOCK_CLIENTS = [
-    {
-        id: 'c1',
-        name: 'Алексей Воронов',
-        tg: '@avoronov',
-        status: 'active',
-        tier: 'pro',
-        lastActivity: '2026-05-07T14:22:00',
-        requests7d: 5,
-        joined: '2026-03-12',
-    },
-    {
-        id: 'c2',
-        name: 'Елена Смирнова',
-        tg: '@esmir',
-        status: 'active',
-        tier: 'free',
-        lastActivity: '2026-05-06T09:10:00',
-        requests7d: 2,
-        joined: '2026-04-01',
-    },
-    {
-        id: 'c3',
-        name: 'Дмитрий Козлов',
-        tg: '@dkozl',
-        status: 'trial',
-        tier: 'pro',
-        lastActivity: '2026-05-05T18:40:00',
-        requests7d: 8,
-        joined: '2026-05-01',
-    },
-    {
-        id: 'c4',
-        name: 'Анна Петрова',
-        tg: '@apetrova',
-        status: 'paused',
-        tier: 'free',
-        lastActivity: '2026-04-28T11:00:00',
-        requests7d: 0,
-        joined: '2026-02-20',
-    },
-    {
-        id: 'c5',
-        name: 'Игорь Никифоров',
-        tg: '@inig',
-        status: 'active',
-        tier: 'pro',
-        lastActivity: '2026-05-07T08:05:00',
-        requests7d: 3,
-        joined: '2026-01-08',
-    },
-];
-
-const MOCK_EVENTS = {
-    c1: [
-        { t: '2026-05-07T14:22:00', type: 'ai_response', label: 'Выдана программа на неделю (силовая)' },
-        { t: '2026-05-07T14:20:00', type: 'ai_request', label: 'Запрос: «дома, гантели, похудеть»' },
-        { t: '2026-05-05T10:00:00', type: 'open', label: 'Открытие Mini App' },
-    ],
-    c2: [
-        { t: '2026-05-06T09:10:00', type: 'ai_response', label: 'Короткая программа (лимит free)' },
-        { t: '2026-05-04T16:30:00', type: 'ai_request', label: 'Форма: цель — выносливость' },
-    ],
-    c3: [
-        { t: '2026-05-05T18:40:00', type: 'ai_response', label: 'Программа: зал, 4 дня' },
-        { t: '2026-05-05T18:38:00', type: 'ai_request', label: 'Чат с тренером' },
-        { t: '2026-05-01T12:00:00', type: 'join', label: 'Привязан к клубу (QR)' },
-    ],
-    c4: [{ t: '2026-04-28T11:00:00', type: 'billing', label: 'Подписка приостановлена админом' }],
-    c5: [
-        { t: '2026-05-07T08:05:00', type: 'ai_request', label: 'Уточнение по травме колена' },
-        { t: '2026-05-06T19:00:00', type: 'ai_response', label: 'Адаптированная программа' },
-    ],
-};
 
 const ROUTES = {
     dashboard: {
@@ -134,7 +59,7 @@ function computeKpis(clients) {
     return { active, requests, pro };
 }
 
-function renderDashboard(clients) {
+function renderDashboard(clients, recentById) {
     const kpi = computeKpis(clients);
     return `
     <div class="adm-kpi-grid">
@@ -171,18 +96,19 @@ function renderDashboard(clients) {
             </tr>
           </thead>
           <tbody>
-            ${recentRows(clients)}
+            ${recentRows(clients, recentById)}
           </tbody>
         </table>
       </div>
-      <div class="adm-panel__foot">Прототип: данные статичны. Подключение API — в следующей итерации.</div>
+      <div class="adm-panel__foot">Данные из Postgres (Neon).</div>
     </section>`;
 }
 
-function recentRows(clients) {
+function recentRows(clients, recentById) {
+    const map = recentById || {};
     const rows = [];
     for (const c of clients) {
-        const ev = (MOCK_EVENTS[c.id] || [])[0];
+        const ev = map[c.id];
         if (ev) rows.push({ c, ev });
     }
     rows.sort((a, b) => new Date(b.ev.t) - new Date(a.ev.t));
@@ -314,9 +240,9 @@ function renderSettings() {
     </section>`;
 }
 
-function renderDrawerClient(client) {
-    const events = MOCK_EVENTS[client.id] || [];
-    const timeline = events
+function renderDrawerClient(client, events) {
+    const list = events || [];
+    const timeline = list
         .map(
             (e) => `
       <li>
@@ -371,7 +297,8 @@ function showToast(message) {
 const state = {
     route: 'dashboard',
     search: '',
-    clients: [...MOCK_CLIENTS],
+    clients: [],
+    recentById: {},
     selectedId: null,
 };
 
@@ -402,7 +329,7 @@ function renderMain() {
     if (!main) return;
     let html = '';
     const clients = getFilteredClients();
-    if (state.route === 'dashboard') html = renderDashboard(state.clients);
+    if (state.route === 'dashboard') html = renderDashboard(state.clients, state.recentById);
     else if (state.route === 'clients') html = renderClientsTable(clients);
     else if (state.route === 'subscriptions') html = renderSubscriptions(state.clients);
     else if (state.route === 'settings') html = renderSettings();
@@ -431,14 +358,25 @@ function onHashChange() {
     renderMain();
 }
 
-function openDrawer(clientId) {
+async function openDrawer(clientId) {
     const client = state.clients.find((c) => c.id === clientId);
     if (!client) return;
     state.selectedId = clientId;
     const drawer = document.querySelector('[data-drawer]');
     const body = document.querySelector('[data-drawer-body]');
     if (!drawer || !body) return;
-    body.innerHTML = renderDrawerClient(client);
+
+    let events = [];
+    try {
+        const r = await fetch(`/api/desk/clients/${encodeURIComponent(clientId)}/events`);
+        const j = await r.json();
+        if (j.ok) events = j.events;
+        else showToast(j.error || 'Не удалось загрузить события');
+    } catch (_) {
+        showToast('Ошибка сети (события)');
+    }
+
+    body.innerHTML = renderDrawerClient(client, events);
     drawer.classList.add('is-open');
     drawer.setAttribute('aria-hidden', 'false');
 
@@ -446,15 +384,32 @@ function openDrawer(clientId) {
         tr.classList.toggle('is-selected', tr.getAttribute('data-client-id') === clientId);
     });
 
-    body.querySelector('[data-save-client]')?.addEventListener('click', () => {
+    body.querySelector('[data-save-client]')?.addEventListener('click', async () => {
         const tier = body.querySelector('[data-tier-select]')?.value;
         const status = body.querySelector('[data-status-select]')?.value;
         const idx = state.clients.findIndex((c) => c.id === clientId);
-        if (idx >= 0) {
-            state.clients[idx] = { ...state.clients[idx], tier, status };
-            showToast('Сохранено локально (прототип).');
+        if (idx < 0) return;
+        try {
+            const r = await fetch(`/api/desk/clients/${encodeURIComponent(clientId)}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tier, status }),
+            });
+            const j = await r.json();
+            if (!j.ok) {
+                showToast(j.error || 'Ошибка сохранения');
+                return;
+            }
+            state.clients[idx] = {
+                ...state.clients[idx],
+                tier: j.client.tier,
+                status: j.client.status,
+            };
+            showToast('Сохранено в базе.');
             renderMain();
-            openDrawer(clientId);
+            await openDrawer(clientId);
+        } catch (_) {
+            showToast('Ошибка сети');
         }
     });
 }
@@ -473,7 +428,7 @@ function bindTableRows() {
     document.querySelectorAll('[data-row-clickable]').forEach((tr) => {
         tr.addEventListener('click', () => {
             const id = tr.getAttribute('data-client-id');
-            if (id) openDrawer(id);
+            if (id) void openDrawer(id);
         });
     });
 }
@@ -486,12 +441,43 @@ function bindSubscriptionOpens() {
             const id = btn.getAttribute('data-open-client');
             if (state.route !== 'clients') {
                 navigate('clients');
-                setTimeout(() => openDrawer(id), 40);
+                setTimeout(() => {
+                    void openDrawer(id);
+                }, 40);
             } else {
-                openDrawer(id);
+                void openDrawer(id);
             }
         });
     });
+}
+
+async function loadDeskData() {
+    const main = document.getElementById('adm-main');
+    if (main) {
+        main.innerHTML =
+            '<section class="adm-panel"><div class="adm-placeholder">Загрузка участников…</div></section>';
+    }
+    try {
+        const r = await fetch('/api/desk/clients');
+        const j = await r.json();
+        if (!j.ok) {
+            showToast(j.error || 'API недоступно');
+            if (main) {
+                main.innerHTML = `<section class="adm-panel"><div class="adm-placeholder">Нет данных: ${escapeHtml(
+                    j.error || 'ошибка'
+                )}. Проверьте DATABASE_URL на сервере.</div></section>`;
+            }
+            return;
+        }
+        state.clients = j.clients;
+        state.recentById = j.recentById || {};
+    } catch (e) {
+        showToast('Ошибка сети при загрузке участников');
+        if (main) {
+            main.innerHTML =
+                '<section class="adm-panel"><div class="adm-placeholder">Не удалось связаться с сервером.</div></section>';
+        }
+    }
 }
 
 function init() {
@@ -523,7 +509,9 @@ function init() {
     state.route = parseHash();
     syncNav();
     syncHeader();
-    renderMain();
+    void loadDeskData().then(() => {
+        renderMain();
+    });
 }
 
 init();
