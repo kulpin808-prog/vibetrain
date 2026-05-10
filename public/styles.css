@@ -100,6 +100,8 @@ body {
 
 .iphone17__screen {
     position: relative;
+    display: flex;
+    flex-direction: column;
     /* Ровно 402×874 по возможности; на низком экране сохраняем пропорции */
     height: min(calc(var(--iphone17-css-h) * 1px), calc(100dvh - var(--iphone-mockup-vreserve)));
     width: min(
@@ -111,13 +113,72 @@ body {
     border-radius: 42px;
     overflow: hidden;
     background: var(--app-surface);
-    /*
-     * От верха стекла до начала контента: (остров относит. экрана) + остров + зазор HIG.
-     * Остров в координатах экрана: top = var(--shell-island-top) - var(--shell-inner-pad).
-     */
-    --iphone-content-inset-top: calc(
-        var(--shell-island-top) - var(--shell-inner-pad) + var(--shell-island-h) + var(--safe-gap-below-system-top)
+    /* Имитация шапки Telegram Mini App (только макет в браузере) */
+    --tg-mock-chrome-safe-h: calc(
+        var(--shell-island-top) - var(--shell-inner-pad) + var(--shell-island-h) + 6px
     );
+    --tg-mock-chrome-bar-h: 44px;
+}
+
+/* Полоса под Dynamic Island + навбар как в Telegram (iOS, светлая схема) */
+.tg-miniapp-chrome {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(60, 60, 67, 0.12);
+}
+
+.tg-miniapp-chrome__safe {
+    flex-shrink: 0;
+    height: var(--tg-mock-chrome-safe-h);
+    pointer-events: none;
+}
+
+.tg-miniapp-chrome__bar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: var(--tg-mock-chrome-bar-h);
+    padding: 0 10px 6px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #007aff;
+}
+
+.tg-miniapp-chrome__back {
+    width: 28px;
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 400;
+    color: #007aff;
+}
+
+.tg-miniapp-chrome__title {
+    flex: 1;
+    text-align: center;
+    color: #000000;
+    font-size: 16px;
+}
+
+.tg-miniapp-chrome__more {
+    width: 28px;
+    text-align: center;
+    color: #007aff;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+}
+
+body.app-native .tg-miniapp-chrome {
+    display: none;
+}
+
+.iphone17__screen > .app {
+    flex: 1;
+    min-height: 0;
 }
 
 /* --- Shell приложения --- */
@@ -170,6 +231,11 @@ body {
     background: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+}
+
+html[data-tg-theme='dark'] .app__tabbar {
+    background: rgba(28, 28, 30, 0.92);
+    border-top-color: rgba(255, 255, 255, 0.1);
 }
 
 .app__tab {
@@ -574,22 +640,14 @@ body {
     line-height: 1.45;
 }
 
-/* Макет: логотип по вертикали как чёрная полоса острова справа; контент — прежний safe-top */
+/* Макет: логотип в строке шапки Telegram справа; контент ниже острова + chrome */
 body:not(.app-native) .iphone17__screen .app__logo-float {
-    top: calc(
-        var(--shell-island-top) - var(--shell-inner-pad) + (var(--shell-island-h) - 28px) / 2
-    );
+    top: calc(var(--tg-mock-chrome-safe-h) + (var(--tg-mock-chrome-bar-h) - 28px) / 2);
 }
 
 body:not(.app-native) .iphone17__screen .app__main {
-    padding-top: max(
-        var(--iphone-content-inset-top),
-        calc(env(safe-area-inset-top, 0px) + var(--safe-gap-below-system-top))
-    );
-    scroll-padding-top: max(
-        var(--iphone-content-inset-top),
-        calc(env(safe-area-inset-top, 0px) + var(--safe-gap-below-system-top))
-    );
+    padding-top: 10px;
+    scroll-padding-top: 10px;
 }
 
 /* --- Публикация: без макета, на весь экран --- */

@@ -1,6 +1,7 @@
 /**
  * Макет телефона в браузере по умолчанию.
  * Без макета: Telegram Mini App (есть initData) или ?mock=0 в URL.
+ * ?forceLight=1 — всегда светлая тема (отладка поверх тёмного Telegram).
  */
 function usePhoneMockup() {
     const q = new URLSearchParams(window.location.search);
@@ -147,27 +148,117 @@ function initTrainerChat(root) {
     });
 }
 
+const THEME_LIGHT = {
+    surface: '#ffffff',
+    elevated: '#f5f5f7',
+    text: '#1d1d1f',
+    muted: '#86868b',
+    separator: 'rgba(60, 60, 67, 0.12)',
+    accent: '#1d1d1f',
+    tabInactive: '#86868b',
+};
+
+const THEME_DARK = {
+    surface: '#1c1c1e',
+    elevated: '#2c2c2e',
+    text: '#f5f5f7',
+    muted: '#8e8e93',
+    separator: 'rgba(255, 255, 255, 0.12)',
+    accent: '#f5f5f7',
+    tabInactive: '#8e8e93',
+};
+
+function applyThemeTokens(t) {
+    const r = document.documentElement.style;
+    r.setProperty('--app-surface', t.surface);
+    r.setProperty('--app-elevated', t.elevated);
+    r.setProperty('--app-text', t.text);
+    r.setProperty('--app-muted', t.muted);
+    r.setProperty('--app-separator', t.separator);
+    r.setProperty('--app-accent', t.accent);
+    r.setProperty('--app-tab-inactive', t.tabInactive);
+}
+
+/**
+ * Раньше подставляли themeParams.bg_color напрямую — при тёмной теме Telegram в чате
+ * WebApp получает тёмные цвета и всё приложение «перекрашивалось», хотя дизайн белый.
+ * Теперь: явно смотрим Telegram.WebApp.colorScheme (light | dark) и задаём свои палитры;
+ * фон мини-приложения синхронизируем через setBackgroundColor там, где доступно.
+ */
 function initTelegramChrome() {
     const tg = window.Telegram?.WebApp;
-    if (!tg) return;
+    if (!tg) {
+        document.documentElement.removeAttribute('data-tg-theme');
+        document.documentElement.style.removeProperty('--app-surface');
+        document.documentElement.style.removeProperty('--app-elevated');
+        document.documentElement.style.removeProperty('--app-text');
+        document.documentElement.style.removeProperty('--app-muted');
+        document.documentElement.style.removeProperty('--app-separator');
+        document.documentElement.style.removeProperty('--app-accent');
+        document.documentElement.style.removeProperty('--app-tab-inactive');
+        return;
+    }
+
     tg.ready();
     tg.expand();
-    const p = tg.themeParams;
-    if (p?.bg_color) {
-        document.documentElement.style.setProperty('--app-surface', p.bg_color);
+
+    const q = new URLSearchParams(window.location.search);
+    const forceLight = q.get('forceLight') === '1';
+
+    function apply() {
+        const scheme = forceLight || tg.colorScheme !== 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-tg-theme', scheme);
+
+        if (scheme === 'light') {
+            applyThemeTokens(THEME_LIGHT);
+            document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#ffffff');
+            if (typeof tg.setBackgroundColor === 'function') {
+                try {
+                    tg.setBackgroundColor('#ffffff');
+                } catch (_) {
+                    /* ignore */
+                }
+            }
+            if (typeof tg.setHeaderColor === 'function') {
+                try {
+                    tg.setHeaderColor('#ffffff');
+                } catch (_) {
+                    /* ignore */
+                }
+            }
+        } else {
+            applyThemeTokens(THEME_DARK);
+            const bg = tg.themeParams?.bg_color || THEME_DARK.surface;
+            const header = tg.themeParams?.secondary_bg_color || tg.themeParams?.header_bg_color || bg;
+            document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg);
+            if (typeof tg.setBackgroundColor === 'function') {
+                try {
+                    tg.setBackgroundColor(bg);
+                } catch (_) {
+                    /* ignore */
+                }
+            }
+            if (typeof tg.setHeaderColor === 'function') {
+                try {
+                    tg.setHeaderColor(header);
+                } catch (_) {
+                    /* ignore */
+                }
+            }
+        }
     }
-    if (p?.text_color) {
-        document.documentElement.style.setProperty('--app-text', p.text_color);
-    }
-    if (p?.hint_color) {
-        document.documentElement.style.setProperty('--app-muted', p.hint_color);
+
+    apply();
+
+    if (typeof tg.onEvent === 'function') {
+        tg.onEvent('themeChanged', apply);
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    initTelegramChrome();
     if (!usePhoneMockup()) {
         document.body.classList.add('app-native');
     }
-    initTelegramChrome();
     mountApp();
 });
